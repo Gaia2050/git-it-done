@@ -1,4 +1,6 @@
+var repoNameEl = document.querySelector("#repo-name");
 var issueContainerEl = document.querySelector("#issues-container");
+var limitWarningEl = document.querySelector("#limit-warning");   //DOM reference to html div container on line 27
 
 var getRepoIssues = function(repo) {
     var apiUrl = "https://api.github.com/repos/" + repo + "/issues?direction=asc";
@@ -6,12 +8,18 @@ var getRepoIssues = function(repo) {
         //request was successful 
         if (response.ok) {
             response.json().then(function(data) {
-                // displayIssues(data);        //calls the variable on line 17
+                displayIssues(data);      
+                
+                 //check if api has paginated issues
+                if (response.headers.get("Link")) {
+                    // console.log(displayWarning(repo);
+                }//calls the variable on line 17
             });
         }
         else {
             alert("There was a problem with your request!");
         }
+        
     });
     console.log(repo);
 };
@@ -51,8 +59,23 @@ var displayIssues = function(issues) {   // is showing the issues  for the repos
 
         issueContainerEl.appendChild(issueEl);
         console.log(data);
-
     }
-}
+};
+
+var displayWarning = function(repo) {
+    //add text to warning <div> container on line 27 html single pg
+    limitWarningEl.textContent = "TO see more than thirty issues, visit ";
+
+    var linkEL = document.createElement("a");
+    linkEL.textContent = "GitHUb.com";
+    linkEL.setAttribute("href", "https://github.com/" = repo + "/issues")
+    linkEL.setAttribute("target", "_blank");
+
+    //append to warning container 
+    limitWarningEl.appendChild(linkEl);
+};
 
 getRepoIssues("facebook/react");
+
+
+//on section 6.3.6
