@@ -1,7 +1,7 @@
 var repoNameEl = document.querySelector("#repo-name");
 var issueContainerEl = document.querySelector("#issues-container");
 var limitWarningEl = document.querySelector("#limit-warning");   //DOM reference to html div container on line 27
-
+var repoNameEl = document.querySelector("#repoName");
 var getRepoIssues = function(repo) {
     var apiUrl = "https://api.github.com/repos/" + repo + "/issues?direction=asc";
     fetch(apiUrl).then(function(response) {
@@ -22,6 +22,12 @@ var getRepoIssues = function(repo) {
         
     });
     console.log(repo);
+    getRepoName = function() {
+        var queryString = document.location.search;
+        var repoName = queryString.split("=")[1];
+        repoNameEl.textContent = repoName;
+        console.log(repoName);
+    }
 };
 
 var displayIssues = function(issues) {   // is showing the issues  for the repos 
@@ -32,7 +38,7 @@ var displayIssues = function(issues) {   // is showing the issues  for the repos
     for (var i = 0; i <issues.length; i ++) {   
         //create link to element to take users to the issues on github 
         var issueEl = document.createElement("a");  // creates the issue element via DOM 
-        issueEl.classList = "list-item flew-row justify-space-between align-center";  //vss selectors
+        issueEl.classList = "list-item flew-row justify-space-between align-center";  //css selectors
         issueEl.setAttribute("href", issues[i].html_url);   //links the to the full issue on github 
         issueEl.setAttribute("target", "_blank");        //opens the new link in a new tab without replacing current webpage
 
@@ -68,14 +74,11 @@ var displayWarning = function(repo) {
 
     var linkEL = document.createElement("a");
     linkEL.textContent = "GitHUb.com";
-    linkEL.setAttribute("href", "https://github.com/" = repo + "/issues")
+    linkEL.setAttribute("href", "https://github.com/" + repo + "/issues");
     linkEL.setAttribute("target", "_blank");
 
     //append to warning container 
     limitWarningEl.appendChild(linkEl);
 };
+getRepoName()
 
-getRepoIssues("facebook/react");
-
-
-//on section 6.3.6

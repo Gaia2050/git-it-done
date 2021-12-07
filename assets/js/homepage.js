@@ -52,9 +52,11 @@ var displayRepos = function(repos, searchTerm) {  //this receives data from var 
             var repoName = repos[i].owner.login + "/" + repos[i].name;  //this is the repos name reformatted
             
             //create container for each repo
-            var repoEl = document.createElement("div");   // dynamically created a <div> el 
+            var repoEl = document.createElement("a");   // dynamically created a <a> el 
             repoEl.classList = "list-item flex-row justify-space-between align-center";    // dynamically making containers for the repos
-            
+            repoEl.setAttribute("href", "./single-repo.html?repo=" + repoName);  //passes information from index.html to sing0le-repo.html used to pass information via the api url 
+
+
             //create a span element to hold repository
             var titleEl = document.createElement("span");    //new span el like in html 33   holds formatted repo name 
             titleEl.textContent = repoName;
