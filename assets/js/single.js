@@ -2,6 +2,21 @@ var repoNameEl = document.querySelector("#repo-name");
 var issueContainerEl = document.querySelector("#issues-container");
 var limitWarningEl = document.querySelector("#limit-warning");   //DOM reference to html div container on line 27
 // var repoNameEl = document.querySelector("#repoName");
+
+var getRepoName = function () {
+    var queryString = document.location.search;  //is grabbing the repo name from the url query string
+    var repoName = queryString.split("=")[1];
+    console.log(repoName);
+
+    if (repoName) {    //if the repos name is typed in, then the repo's issues will be displayed on the pg 
+        repoNameEl.textContent = repoName;
+        getRepoIssues(repoName);
+    
+    } else {   // if no repo was given then redirect to the homepage
+        document.location.replace("./index.html");
+}
+};
+
 var getRepoIssues = function(repo) {
     var apiUrl = "https://api.github.com/repos/" + repo + "/issues?direction=asc";
     fetch(apiUrl).then(function(response) {
@@ -12,6 +27,7 @@ var getRepoIssues = function(repo) {
                 
                  //check if api has paginated issues
                 if (response.headers.get("Link")) {
+                    displayWarning(repo);
                     // console.log(displayWarning(repo);
                 }//calls the variable on line 17
             });
@@ -24,26 +40,14 @@ var getRepoIssues = function(repo) {
     
 };
 
-var getRepoName = function () {
-        var queryString = document.location.search;  //is grabbing the repo name from the url query string
-        var repoName = queryString.split("=")[1];
-        console.log(repoName);
-
-        if (repoName) {    //if the repos name is typed in, then the repo's issues will be displayed on the pg 
-            repoNameEl.textContent = repoName;
-            getRepoIssues(repoName);
-        
-        } else {   // if no repo was given then redirect to the homepage
-            document.location.replace("./index.html");
-    }
-};
-
+    
 var displayIssues = function(issues) {   // is showing the issues  for the repos 
     if (issues.length === 0) {
         issueContainerEl.textContent = "This repo has no open issues!";
         return;
     }
     for (var i = 0; i <issues.length; i ++) {   
+        console.log(issues[i]);
         //create link to element to take users to the issues on github 
         var issueEl = document.createElement("a");  // creates the issue element via DOM 
         issueEl.classList = "list-item flew-row justify-space-between align-center";  //css selectors
@@ -80,7 +84,7 @@ var displayWarning = function(repo) {
     //add text to warning <div> container on line 27 html single pg
     limitWarningEl.textContent = "TO see more than thirty issues, visit ";
 
-    var linkEL = document.createElement("a");
+    var linkEl = document.createElement("a");
     linkEL.textContent = "GitHUb.com";
     linkEL.setAttribute("href", "https://github.com/" + repo + "/issues");
     linkEL.setAttribute("target", "_blank");
@@ -88,5 +92,8 @@ var displayWarning = function(repo) {
     //append to warning container 
     limitWarningEl.appendChild(linkEl);
 };
-getRepoName()
+
+
+
+getRepoName();
 
